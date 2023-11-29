@@ -1,6 +1,14 @@
 import streamlit as st
 import pandas
 
+
+def display_cell(st, row):
+    st.header(row["title"])
+    st.write(row["description"])
+    st.image("images/" + row["image"])
+    st.write(f"[Source code]({row['url']})")
+
+
 st.set_page_config(layout="wide")
 
 col1, col2 = st.columns([1, 3])
@@ -27,16 +35,16 @@ Below you can find some of the apps I have built in Python, Fell free to contact
 
 st.write(content2)
 
-col3, col4 = st.columns([1, 1])
+col3, empty4, col5 = st.columns([1.5, 0.5, 1.5])
 
 df = pandas.read_csv("data.csv", sep=";")
 
 with col3:
     for index, row in df.iterrows():
         if index % 2 == 0:
-            st.header(row["title"])
+            display_cell(st, row)
 
-with col4:
+with col5:
     for index, row in df.iterrows():
         if index % 2 == 1:
-            st.header(row["title"])
+            display_cell(st, row)
