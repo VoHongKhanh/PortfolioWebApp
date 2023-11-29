@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas
 
 st.set_page_config(layout="wide")
 
@@ -25,3 +26,17 @@ Below you can find some of the apps I have built in Python, Fell free to contact
 """
 
 st.write(content2)
+
+col3, col4 = st.columns([1, 1])
+
+df = pandas.read_csv("data.csv", sep=";")
+
+with col3:
+    for index, row in df.iterrows():
+        if index % 2 == 0:
+            st.header(row["title"])
+
+with col4:
+    for index, row in df.iterrows():
+        if index % 2 == 1:
+            st.header(row["title"])
