@@ -3,7 +3,7 @@ import pandas
 
 
 def display_cell(st, row):
-    st.header(row["title"])
+    st.subheader(row["title"])
     st.write(row["description"])
     st.image("images/" + row["image"])
     st.write(f"[Source code]({row['url']})")
