@@ -1,6 +1,7 @@
 import streamlit as st
 import smtplib, ssl
 from email.message import EmailMessage
+import os
 
 
 def send_email(to_address, subject, message):
@@ -9,7 +10,7 @@ def send_email(to_address, subject, message):
     context = ssl.create_default_context()
 
     username = "khanhvh.fpt@gmail.com"
-    password = "lyzn oyxy uqus cykm"
+    password = os.getenv("PythonEmailPassword")  # Create system variable
 
     msg = EmailMessage()
     msg.set_content(message)
@@ -23,15 +24,32 @@ def send_email(to_address, subject, message):
         server.quit()
 
 
+def disable_submit_button():
+    st.session_state.disabled_submit = True
+
+
+if "disabled_submit" not in st.session_state:
+    st.session_state.disabled_submit = False
+
 st.set_page_config(layout="wide")
 st.header("Contact Us")
 
 with st.form(key="frm_contact_us"):
-    user_email = st.text_input("Your email address")
-    message = st.text_area("Your message")
-    button = st.form_submit_button("Submit")
+    status = st.session_state.disabled_submit
+    user_email = st.text_input("Your email address", disabled=status)
+    topic = st.selectbox("What topic do you want to discuss?",
+                         ("Job Inquiries", "Project Proposals", "Other"), disabled=status)
+    message = st.text_area("Your message", disabled=status)
+
+    button = st.form_submit_button('Submit', on_click=disable_submit_button, disabled=status)
     if button:
         send_email(to_address="khanhvh.fpt@gmail.com",
                    subject=f"The comment from {user_email}",
-                   message=message)
+                   message=
+f"""
+From: {user_email}
+Topic: {topic}
+-----
+{message}
+""")
         st.info("Your email was sent successfully!")
